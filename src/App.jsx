@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
+import connection from "./Api/connection";
 
-function App() {
+const App = () => {
+  const [product, setProduct] = useState({
+    name: "",
+    price: 0,
+  });
+
+  const handleClick = (value) => {
+    console.log(value);
+    setProduct(value);
+
+    connection.get(`/products/${value.id}`).then((res) => {
+      console.log(res.data);
+    });
+  };
+
   return (
     <div className="container">
+      <h1>Catalago de Produtos</h1>
       <div className="container-card">
         <div className="card card1">
           <img
@@ -14,9 +30,18 @@ function App() {
           <h1>Pao de quiejo</h1>
           <p>
             Preco <br />
-            <span>$ 23,50</span>
+            <span>R$ 25,50</span>
           </p>
-          <button>Comprar</button>
+          <button
+            onClick={() =>
+              handleClick({
+                price: 25.5,
+                name: "Pao de quiejo",
+              })
+            }
+          >
+            Comprar
+          </button>
         </div>
         <div className="card card2">
           <img
@@ -27,9 +52,9 @@ function App() {
           <h1>Cafe</h1>
           <p>
             Preco <br />
-            <span>$ 23,50</span>
+            <span>R$ 23,50</span>
           </p>
-          <button>Comprar</button>
+          <button onClick={() => handleClick(23.5)}>Comprar</button>
         </div>
         <div className="card card3">
           <img
@@ -40,13 +65,13 @@ function App() {
           <h1>Agua</h1>
           <p>
             Preco <br />
-            <span>$ 23,50</span>
+            <span>R$ 23,50</span>
           </p>
-          <button>Comprar</button>
+          <button onClick={() => handleClick(23.5)}>Comprar</button>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default App;
