@@ -1,20 +1,24 @@
 import React, { useState } from "react";
-import "./App.css";
+import "./App.scss";
 import connection from "./Api/connection";
+import Modal from "./Components/Modal/Modal.jsx";
 
 const App = () => {
   const [product, setProduct] = useState({
-    name: "",
-    price: 0,
+    description: "",
+    price: "",
+    paymentType: "",
   });
+  const [modal, setModal] = useState(false);
 
   const handleClick = (value) => {
-    console.log(value);
-    setProduct(value);
-
-    connection.get(`/products/${value.id}`).then((res) => {
-      console.log(res.data);
+    setProduct({
+      ...product,
+      description: value.description,
+      price: value.price,
     });
+    setModal(true);
+    return;
   };
 
   return (
@@ -30,18 +34,21 @@ const App = () => {
           <h1>Pao de quiejo</h1>
           <p>
             Preco <br />
-            <span>R$ 25,50</span>
+            <span>R$ 1,00</span>
           </p>
           <button
             onClick={() =>
               handleClick({
-                price: 25.5,
-                name: "Pao de quiejo",
+                description: "Pao de quiejo",
+                price: "1.00",
               })
             }
           >
             Comprar
           </button>
+          {modal ? (
+            <Modal value={product} modalOpen={() => setModal()} />
+          ) : null}
         </div>
         <div className="card card2">
           <img
@@ -52,9 +59,18 @@ const App = () => {
           <h1>Cafe</h1>
           <p>
             Preco <br />
-            <span>R$ 23,50</span>
+            <span>R$ 1,00</span>
           </p>
-          <button onClick={() => handleClick(23.5)}>Comprar</button>
+          <button
+            onClick={() =>
+              handleClick({
+                price: "1.00",
+                name: "Cafe",
+              })
+            }
+          >
+            Comprar
+          </button>
         </div>
         <div className="card card3">
           <img
@@ -65,9 +81,18 @@ const App = () => {
           <h1>Agua</h1>
           <p>
             Preco <br />
-            <span>R$ 23,50</span>
+            <span>R$ 1,00</span>
           </p>
-          <button onClick={() => handleClick(23.5)}>Comprar</button>
+          <button
+            onClick={() =>
+              handleClick({
+                price: "1.00",
+                name: "Agua",
+              })
+            }
+          >
+            Comprar
+          </button>
         </div>
       </div>
     </div>
