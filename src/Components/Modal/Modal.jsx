@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import connection from "../../Api/connection";
+import ModalFinishing from "../ModalFinishin/ModalFinishing";
+
 import "./Modal.scss";
 
 const Modal = ({ value, modalOpen }) => {
@@ -11,6 +13,8 @@ const Modal = ({ value, modalOpen }) => {
     print_on_terminal: false,
   });
   const [loading, setLoading] = useState(false);
+  const [modalFinishing, setModalFinishing] = useState(false);
+  const [resData, setResData] = useState({});
 
   const handleChange = async (e) => {
     const convertPrice = product.price.toString();
@@ -32,27 +36,18 @@ const Modal = ({ value, modalOpen }) => {
     if (product.paymentType === "pix") {
       return alert("Pix não é um tipo de pagamento disponível no momento");
     }
-
     await connection
       .post("/createTransaction", body)
       .then((res) => {
         console.log(res.data);
+        setResData(res.data);
+        setModalFinishing(true);
+        return;
       })
       .catch((err) => {
-        console.log(err.response.data);
+        console.log(err.response);
         setLoading(false);
         return;
-      });
-
-      
-
-    await connection
-      .get("/getInfoTransaction")
-      .then((resolve) => {
-        console.log("resov", resolve);
-      })
-      .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -131,7 +126,12 @@ const Modal = ({ value, modalOpen }) => {
           <div className="modal-content-button">
             <button type="submit">Comprar</button>
           </div>
-          {loading ? <div>Loading...</div> : null}
+          {modalFinishing ? (
+            <ModalFinishing
+              value={resData}
+              modalOpen={() => setModalFinishing(false)}
+            />
+          ) : null}
         </div>
       </form>
     </div>
