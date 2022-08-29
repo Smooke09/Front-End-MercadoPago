@@ -3,37 +3,57 @@ import "./modalFinishing.scss";
 import Loading from "../Loading/Loading";
 import db from "../../Api/database";
 
+
 const ModalFinishing = ({ value, modalOpen }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);
   const [status, setStatus] = useState({});
 
-
   //fazendo api e enviando pro banco tudo certinho precisa so verificar se o status é aprovado ou nao
-  
-  
+
   /*   useEffect(() => {
     if (reload) setTimeout(() => {}, 6000);
   }, []);
  */
-  const VerifyDataPayment = async () => {
-    setLoading(true);
-    /*  if (value.NumeroDoPagamento === undefined) {
-      return (
-        <>
-          <h1>Erro ao gerar o pagamento</h1>
-          <p>Por favor, tente novamente</p>
-        </>
-      );
+
+  const VerifyDataPayment = () => {
+
+
+
+
+
+
+
+
+
+
+
+ /*    if (value.NumeroDoPagamento === "") {
+      return;
+    }
+
+    if (status.id === value.NumeroDoPagamento && status.state == "approved") {
+      console.log("pagamento aprovado");
+      return;
+    } else if (
+      status.id === value.NumeroDoPagamento &&
+      status.state == "CANCELED"
+    ) {
+      console.log("pagamento cancelado");
+      return;
+    } else {
+      console.log("pagamento pendente");
+      setTimeout(() => {
+        db.database()
+          .ref("pagamentos/" + value.NumeroDoPagamento)
+          .on("value", (snapshot) => {
+            console.log("trazendo o id do pagamento", snapshot.val());
+            setStatus(snapshot.val());
+            console.log("status", status);
+          });
+        setLoading(false);
+      }, 6000);
     } */
-    await db
-      .database()
-      .ref("pagamentos/" + value.NumeroDoPagamento)
-      .on("value", (snapshot) => {
-        console.log("trazendo o id do pagamento", snapshot.val());
-      });
-    console.log("stauts", status);
-    setLoading(false);
   };
 
   return (
@@ -43,12 +63,7 @@ const ModalFinishing = ({ value, modalOpen }) => {
           {loading ? (
             <Loading />
           ) : (
-            <div className="modal-finishing-item">
-              {VerifyDataPayment()}
-              <h1>Compra realizada com sucesso</h1>
-              <p>Seu pedido será entregue em até 3 dias úteis</p>
-              <p>Status: {status}</p>
-            </div>
+            <div className="modal-finishing-item">{VerifyDataPayment()}</div>
           )}
         </div>
       </div>
