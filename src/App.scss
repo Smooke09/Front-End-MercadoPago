@@ -62,6 +62,12 @@ button {
   margin-top: 20px;
 }
 
+button:hover {
+  background-color: #333;
+  transition: 0.5s;
+  color: #fff;
+}
+
 p {
   margin-top: 10px;
 }

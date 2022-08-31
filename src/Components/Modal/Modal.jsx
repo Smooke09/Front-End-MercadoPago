@@ -1,16 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import connection from "../../Api/connection";
 import ModalFinishing from "../ModalFinishin/ModalFinishing";
 
-import io from "socket.io-client";
-const socket = io("http://localhost:3333");
-
 import "./Modal.scss";
 
 const Modal = ({ value, modalOpen }) => {
-  socket.emit("send_message", value);
-
   const [product, setProduct] = useState({
     description: value.description,
     price: value.price,
@@ -47,6 +42,7 @@ const Modal = ({ value, modalOpen }) => {
         console.log("res data", res.data);
         setResData(res.data);
         setModalFinishing(true);
+
         return;
       })
       .catch((err) => {

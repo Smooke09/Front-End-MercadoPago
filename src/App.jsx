@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./App.scss";
-import connection from "./Api/connection";
 import Modal from "./Components/Modal/Modal.jsx";
 
 const App = () => {
@@ -65,7 +64,7 @@ const App = () => {
             onClick={() =>
               handleClick({
                 price: "1.00",
-                name: "Cafe",
+                description: "Cafe",
               })
             }
           >
@@ -87,7 +86,7 @@ const App = () => {
             onClick={() =>
               handleClick({
                 price: "1.00",
-                name: "Agua",
+                description: "Agua",
               })
             }
           >
