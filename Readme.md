@@ -2,17 +2,21 @@
 
 ## Sobre Aplicação
 
-- Aplicação PDV integrada com A maquininha point pro 2 do Mercado Pago 
+- Aplicação PDV integrada com A maquininha(point pro 2) do Mercado Pago 
+
+
+
+![Imagem product](https://i.imgur.com/JTFObYX.png)
 
 ## Instruções
 <br>
 <br>
 
-- Para instalar os pacotes backend,
+- Para instalar os pacotes FrontEnd,
     
         yarn  
     
-- Para iniciar a aplicação backend
+- Para iniciar a aplicação FrontEnd
     
         yarn dev
 
