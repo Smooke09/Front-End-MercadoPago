@@ -9,14 +9,28 @@ const Modal = ({ value, modalOpen }) => {
   const [product, setProduct] = useState({
     description: value.description,
     price: value.price,
-    paymentType: "",
+    paymentType: value.paymentType,
     print_on_terminal: false,
   });
   const [loading, setLoading] = useState(false);
   const [modalFinishing, setModalFinishing] = useState(false);
   const [resData, setResData] = useState({});
 
+  //Validando se o usuario selecionou pix ou cartão
+  if (product.paymentType === "pix") {
+    let paymentPix = document.querySelector(".alert-payment");
+    paymentPix.style.display = "block";
+  }
+  if (
+    product.paymentType === "credit_card" ||
+    product.paymentType === "debit_card"
+  ) {
+    let paymentPix = document.querySelector(".alert-payment");
+    paymentPix.style.display = "none";
+  }
+
   const handleChange = async (e) => {
+    //Convertendo o valor do produto de sentavos para Valor que API aceita
     const convertPrice = product.price.toString();
     const convertPrice2 = convertPrice.replace(/\./g, "");
     const convertPrice3 = parseInt(convertPrice2);
@@ -33,9 +47,12 @@ const Modal = ({ value, modalOpen }) => {
       },
     };
 
+    //Validando se o usuario selecionou pix e inserir um alert na tela para o usuario
     if (product.paymentType === "pix") {
       return alert("Pix não é um tipo de pagamento disponível no momento");
     }
+
+    // Fazendo a requisição para a api
     await connection
       .post("/createTransaction", body)
       .then((res) => {
@@ -52,6 +69,7 @@ const Modal = ({ value, modalOpen }) => {
       });
   };
 
+  //Função para fechar o modal
   const modalClose = () => {
     modalOpen(false);
     console.log(product);
@@ -84,6 +102,7 @@ const Modal = ({ value, modalOpen }) => {
               </label>
               <label>
                 <span>Total:</span> R$ {value.price}
+                <p className="alert-payment">Pagamento por PIX indisponivel</p>
               </label>
               <select
                 list="payments"
@@ -95,9 +114,9 @@ const Modal = ({ value, modalOpen }) => {
                   })
                 }
               >
-                <option value="pix">PIX</option>
-                <option value="credit_card">Cartão de Credito</option>
                 <option value="debit_card">Cartão de Debito</option>
+                <option value="credit_card">Cartão de Credito</option>
+                <option value="pix">PIX</option>
               </select>
             </div>
             <div className="modal-content-checked">

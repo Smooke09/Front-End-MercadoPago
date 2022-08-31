@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./modalFinishing.scss";
 import Loading from "../Loading/Loading";
-import db from "../../Api/database";
 
 import io from "socket.io-client";
 import axios from "axios";
@@ -9,19 +8,17 @@ const socket = io("http://localhost:3333");
 
 const ModalFinishing = ({ value, modalOpen }) => {
   const [loading, setLoading] = useState(true);
-  const [reload, setReload] = useState(false);
-  const [status, setStatus] = useState({});
   const [aproved, setAproved] = useState(false);
   const [payment, setPayment] = useState({});
 
-  //fazendo api e enviando pro banco tudo certinho precisa so verificar se o status é aprovado ou nao
-
+  // renderizando dados do webSocket e atualizando o status
   useEffect(() => {
     socket.on("payment", (data) => {
       setPayment(data);
     });
   }, [payment]);
 
+  // Validando de o status é aprovado ou nao e se o usuario ja fez o pagamento
   function verifyPayment() {
     let intervalPayment = setInterval(() => {
       if (payment.state) {
@@ -60,11 +57,13 @@ const ModalFinishing = ({ value, modalOpen }) => {
     aproved ? clearInterval(intervalPayment) : null;
   }
 
+  // fechando o modal e limpando o estado do pagamento
   function finishiBuy() {
     setPayment({});
     location.reload();
   }
 
+  // Inserindo mensagens de error para o usuario
   function toogleText() {
     if (payment.payment.state == "approved") {
       return "Compra aprovada";
@@ -119,41 +118,3 @@ const ModalFinishing = ({ value, modalOpen }) => {
 };
 
 export default ModalFinishing;
-
-/* 
-{aproved ? (
-  <div className="modal-finishing-content">
-    <h1>Pagamento Aprovado</h1>
-    <p>
-      Seu pagamento foi aprovado seu comprovante sera impresso! Obrigado
-      pela preferencia
-    </p>
-    <div className="modal-finishing-buttons">
-      <button
-        className="modal-finishing-button-cancel"
-        onClick={() => finishiBuy()}
-      >
-        Fechar
-      </button>
-    </div>
-  </div>
-) : (
-  <div className="modal-finishing-content">
-    <h1>Finalizando pagamento</h1>
-    <p>
-      Aguarde enquanto finalizamos o pagamento, caso o pagamento não seja
-      finalizado em 30 segundos, clique em cancelar.e refaça o pagamento
-    </p>
-    <div className="modal-finishing-buttons">
-      <button
-        className="modal-finishing-button-cancel"
-        onClick={() => modalOpen()}
-      >
-        Cancelar
-      </button>
-      <div className="loading">
-        <Loading />
-      </div>
-    </div>
-  </div>
-)} */
